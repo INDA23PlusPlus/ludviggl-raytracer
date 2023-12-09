@@ -2,6 +2,7 @@
 #ifndef VECTOR_H
 #define VECTOR_H
 
+#include <stdlib.h>
 #include <math.h>
 
 #define x_(v) (v)[0]
@@ -11,13 +12,14 @@
 #define g_(v) (v)[1]
 #define b_(v) (v)[2]
 
+#define scl double
+
+#define v3_(...) (v3) { __VA_ARGS__ }
 #define splat(x) ((v3) { x, x, x, 0 })
 #define reduce(v) (x_(v) + y_(v) + z_(v))
 
 #define zero(x) (FP_ZERO == fpclassify(x))
 #define min(a, b) ((a) > (b) ? (b) : (a))
-
-#define scl double
 
 #define sqrt(x) _Generic((x), \
               float : sqrtf,  \
@@ -59,6 +61,30 @@ static inline v3 clamp(v3 v)
     y_(v) = y_(v) < 0 ? 0 : (y_(v) > 1 ? 1 : y_(v));
     z_(v) = z_(v) < 0 ? 0 : (z_(v) > 1 ? 1 : z_(v));
     return v;
+}
+
+static inline v3 proj_n(v3 v, v3 n)
+{
+    return n * dot(v, n);
+}
+
+static inline v3 reflect_n(v3 v, v3 n)
+{
+    return v - 2 * proj_n(v, n);
+}
+
+static inline scl randf()
+{
+    return (scl)rand() / RAND_MAX;
+}
+
+static inline v3 randv3()
+{
+    return normalize((v3) {
+        2 * randf() - 1,
+        2 * randf() - 1,
+        2 * randf() - 1
+    });
 }
 
 #endif

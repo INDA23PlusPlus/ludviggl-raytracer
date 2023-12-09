@@ -3,10 +3,12 @@
 #define ENTITY_H
 
 #include "vector.h"
+#include "intersection.h"
 
 enum entity_type {
     ET_SPHERE,
-    ET_PLANE
+    ET_PLANE,
+    ET_BOX
 };
 
 struct sphere {
@@ -19,8 +21,14 @@ struct plane {
     scl dist;
 };
 
+struct box {
+    v3 c0;
+    v3 c1;
+};
+
 struct entity {
     int type;
+    int mat_id;
     union {
         struct sphere sphere;
         struct plane plane;
@@ -31,5 +39,23 @@ struct collection {
     struct entity *data;
     int    count;
 };
+
+static inline scl ent_intersect(struct entity *ent, v3 ro, v3 rd)
+{
+    switch (ent->type)
+    {
+        case ET_SPHERE: return sphere_intersect(ent->sphere.orig,
+                                                ent->sphere.radius,
+                                                ro,
+                                                rd);
+
+        case ET_PLANE: return plane_intersect(ent->plane.normal,
+                                              ent->plane.dist,
+                                              ro,
+                                              rd);
+    }
+
+    return -1;
+}
 
 #endif
