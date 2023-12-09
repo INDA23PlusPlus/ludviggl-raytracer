@@ -1,6 +1,5 @@
 
 #include "image.h"
-#include "log.h"
 #include "mem.h"
 
 #define STB_IMAGE_WRITE_IMPLEMENTATION

@@ -6,7 +6,7 @@ scl sphere_intersect(v3 so, scl r, v3 ro, v3 rd)
     v3 od = ro - so;
 
     scl a = dot(rd, rd);
-    scl b = -2 * dot(rd, od);
+    scl b = 2 * dot(rd, od);
     scl c = dot(od, od) - r * r;
 
     scl d = b * b - 4 * a * c;
@@ -15,7 +15,8 @@ scl sphere_intersect(v3 so, scl r, v3 ro, v3 rd)
     scl t0 = (-b + sqrt(d)) / 2 / a;
     scl t1 = (-b - sqrt(d)) / 2 / a;
 
-    return min(t0, t1);
+    if (t0 < t1 && t0 > 0) return t0;
+    else return t1;
 }
 
 scl plane_intersect(v3 n, scl d, v3 ro, v3 rd)
