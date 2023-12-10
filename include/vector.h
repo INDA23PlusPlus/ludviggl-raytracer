@@ -20,6 +20,7 @@
 
 #define zero(x) (FP_ZERO == fpclassify(x))
 #define min(a, b) ((a) > (b) ? (b) : (a))
+#define tiny ((scl)0.00001)
 
 #define sqrt(x) _Generic((x), \
               float : sqrtf,  \
@@ -33,7 +34,7 @@ static inline v3 cross(v3 u, v3 v)
 {
     return (v3) {
         y_(u) * z_(v) - z_(u) * y_(v),
-        x_(u) * z_(v) - z_(u) * x_(v),
+        z_(u) * x_(v) - x_(u) * z_(v),
         x_(u) * y_(v) - y_(u) * x_(v)
     };
 }
@@ -51,8 +52,7 @@ static inline scl norm(v3 v)
 
 static inline v3 normalize(v3 v)
 {
-    scl n = norm(v);
-    return v / n;
+    return v / norm(v);
 }
 
 static inline v3 clamp(v3 v)

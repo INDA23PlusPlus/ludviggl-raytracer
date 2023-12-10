@@ -31,7 +31,8 @@ struct entity {
     int mat_id;
     union {
         struct sphere sphere;
-        struct plane plane;
+        struct plane  plane;
+        struct box    box;
     };
 };
 
@@ -40,19 +41,22 @@ struct collection {
     int    count;
 };
 
-static inline scl ent_intersect(struct entity *ent, v3 ro, v3 rd)
+static inline scl ent_intersect(struct entity *ent, v3 ro, v3 rd, v3 *n)
 {
     switch (ent->type)
     {
         case ET_SPHERE: return sphere_intersect(ent->sphere.orig,
                                                 ent->sphere.radius,
-                                                ro,
-                                                rd);
+                                                ro, rd, n);
 
         case ET_PLANE: return plane_intersect(ent->plane.normal,
                                               ent->plane.dist,
-                                              ro,
-                                              rd);
+                                              ro, rd, n);
+
+        case ET_BOX: return aabb_intersect(ent->box.c0,
+                                           ent->box.c1,
+                                           ro, rd, n);
+
     }
 
     return -1;

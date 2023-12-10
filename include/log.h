@@ -12,5 +12,6 @@
 
 #define log(...) printf("log: " __VA_ARGS__)
 #define fatal(...) { printf("fatal error: " __VA_ARGS__); abort(); }
+#define clearln() printf("\1xB[2K");
 
 #endif

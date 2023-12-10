@@ -34,6 +34,17 @@ void scene_add_plane(struct scene *scn, v3 normal, scl dist, int mat_id)
     list_append(&scn->entities, ent);
 }
 
+void scene_add_box(struct scene *scn, v3 c0, v3 c1, int mat_id)
+{
+    // TODO: Order coords
+    struct entity ent;
+    ent.type = ET_BOX;
+    ent.mat_id = mat_id;
+    ent.box.c0 = c0;
+    ent.box.c1 = c1;
+    list_append(&scn->entities, ent);
+}
+
 int scene_add_diffuse(struct scene *scn, v3 color)
 {
     struct material mat;

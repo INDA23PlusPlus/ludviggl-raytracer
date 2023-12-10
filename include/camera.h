@@ -22,7 +22,7 @@ static inline void cam_gen_ray(struct camera *cam,
                                v3 *dir)
 {
     *orig = cam->orig;
-    *dir = cam->crn + u * cam->u + v * cam->v - *orig;
+    *dir = cam->crn + u * cam->u + v * cam->v;
 }
 
 #endif
