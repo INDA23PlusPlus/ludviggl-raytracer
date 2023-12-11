@@ -45,6 +45,17 @@ void scene_add_box(struct scene *scn, v3 c0, v3 c1, int mat_id)
     list_append(&scn->entities, ent);
 }
 
+void scene_add_tri(struct scene *scn, v3 v0, v3 v1, v3 v2, int mat_id)
+{
+    struct entity ent;
+    ent.type = ET_TRIANGLE;
+    ent.mat_id = mat_id;
+    ent.tri.v0 = v0;
+    ent.tri.v1 = v1;
+    ent.tri.v2 = v2;
+    list_append(&scn->entities, ent);
+}
+
 int scene_add_diffuse(struct scene *scn, v3 color)
 {
     struct material mat;
@@ -60,6 +71,16 @@ int scene_add_metallic(struct scene *scn, v3 color, scl fuzz)
     mat.type = MT_METALLIC;
     mat.metallic.color = color;
     mat.metallic.fuzz = fuzz;
+    list_append(&scn->materials, mat);
+    return scn->materials.count - 1;
+}
+
+int scene_add_emissive(struct scene *scn, v3 color, scl brightness)
+{
+    struct material mat;
+    mat.type = MT_EMISSIVE;
+    mat.emissive.color = color;
+    mat.emissive.brightness = brightness;
     list_append(&scn->materials, mat);
     return scn->materials.count - 1;
 }

@@ -133,4 +133,53 @@ static inline scl aabb_intersect(v3 c0, v3 c1, v3 ro, v3 rd, v3 *n)
     return t;
 }
 
+static inline scl tri_intersect(v3 v0, v3 v1, v3 v2, v3 ro, v3 rd, v3 *n)
+{
+    /* Möller-Trumbore */
+
+    v3 u = v1 - v0;
+    v3 v = v2 - v0;
+    v3 x = ro - v0;
+
+    v3 tn = normalize(cross(u, v));
+
+    rd = -rd;
+
+    scl d =
+        x_(rd) * (y_(u) * z_(v) - z_(u) * y_(v)) -
+        x_(u) * (y_(rd) * z_(v) - z_(rd) * y_(v)) +
+        x_(v) * (y_(rd) * z_(u) - z_(rd) * y_(u));
+
+    if (zero(d)) return -1;
+
+    scl td =
+        x_(x) * (y_(u) * z_(v) - z_(u) * y_(v)) -
+        x_(u) * (y_(x) * z_(v) - z_(x) * y_(v)) +
+        x_(v) * (y_(x) * z_(u) - z_(x) * y_(u));
+
+    scl pd =
+        x_(rd) * (y_(x) * z_(v) - z_(x) * y_(v)) -
+        x_(x) * (y_(rd) * z_(v) - z_(rd) * y_(v)) +
+        x_(v) * (y_(rd) * z_(x) - z_(rd) * y_(x));
+
+    scl qd =
+        x_(rd) * (y_(u) * z_(x) - z_(u) * y_(x)) -
+        x_(u) * (y_(rd) * z_(x) - z_(rd) * y_(x)) +
+        x_(x) * (y_(rd) * z_(u) - z_(rd) * y_(u));
+
+    scl t = td / d;
+    scl p = pd / d;
+    scl q = qd / d;
+
+    if (0 < p && 0 < q && p + q < 1)
+    {
+        return t;
+        *n = dot(-rd, tn) < 0 ? tn : -tn;
+    }
+    else
+    {
+        return -1;
+    }
+}
+
 #endif

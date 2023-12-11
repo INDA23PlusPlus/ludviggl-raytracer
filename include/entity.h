@@ -8,7 +8,8 @@
 enum entity_type {
     ET_SPHERE,
     ET_PLANE,
-    ET_BOX
+    ET_BOX,
+    ET_TRIANGLE
 };
 
 struct sphere {
@@ -26,6 +27,12 @@ struct box {
     v3 c1;
 };
 
+struct tri {
+    v3 v0;
+    v3 v1;
+    v3 v2;
+};
+
 struct entity {
     int type;
     int mat_id;
@@ -33,6 +40,7 @@ struct entity {
         struct sphere sphere;
         struct plane  plane;
         struct box    box;
+        struct tri    tri;
     };
 };
 
@@ -56,6 +64,11 @@ static inline scl ent_intersect(struct entity *ent, v3 ro, v3 rd, v3 *n)
         case ET_BOX: return aabb_intersect(ent->box.c0,
                                            ent->box.c1,
                                            ro, rd, n);
+
+        case ET_TRIANGLE: return tri_intersect(ent->tri.v0,
+                                               ent->tri.v1,
+                                               ent->tri.v2,
+                                               ro, rd, n);
 
     }
 
