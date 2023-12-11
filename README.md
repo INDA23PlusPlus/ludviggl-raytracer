@@ -1,2 +1,2 @@
 # Raytracer
-![Example](images/examples.png)
+![Example](images/example.png)
